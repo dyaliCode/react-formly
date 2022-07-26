@@ -1,5 +1,5 @@
 import { IField } from '@/lib/utils/types'
-import React, { FormEventHandler, FunctionComponent, useState } from 'react'
+import React, { FormEventHandler, FunctionComponent, useEffect, useState } from 'react'
 
 import { isRequired, IPropsField } from "../../utils";
 
@@ -24,6 +24,10 @@ const Input: FunctionComponent<IPropsField> = ({ form_name, field, changeValue }
 
     changeValue(data);
   };
+
+  useEffect(() => {
+    setValue(field.value ?? '');
+  }, [field])
 
   return (
     <input

@@ -4,10 +4,11 @@ import {
   type IField,
   type IForm,
   preprocess_and_validate_field,
+  saveForm,
   // type IBtnSubmit,
   // type IBtnReset
 } from '../utils';
-import Field from './fields/Field';
+import Field from './Field';
 
 type Props = {
   form_name: string
@@ -54,16 +55,8 @@ const Formly: FunctionComponent<Props> = ({ form_name, fields, get_values }) => 
     setCurrentForm(newForm);
 
 		// Update forms.
-    const form = forms.find((form: IForm) => form.form_name === newForm.form_name);
-    if (!form) {
-      setForms([...forms, newForm]);
-    } else {
-      const _forms = forms.map((form: IForm) =>
-        form.form_name === newForm.form_name ? newForm : form
-      );
-      setForms(_forms)
-    }
-    console.log('curentForm.values', curentForm.values)
+    setForms(await saveForm(forms, newForm))
+    
     get_values(curentForm.values)
   }
 
@@ -105,19 +98,11 @@ const Formly: FunctionComponent<Props> = ({ form_name, fields, get_values }) => 
       const newForm = { ...curentForm, fields: fields, values, valid: dirty ? false : true };
       setCurrentForm(newForm);
 
+      console.log('newForm', newForm)
 
       // Forms.
-      const form = forms.find((form: IForm) => form.form_name === newForm.form_name);
-      if (!form) {
-        setForms([...forms, newForm]);
-      } else {
-        const _forms = forms.map((form: IForm) =>
-          form.form_name === newForm.form_name ? newForm : form
-        );
-        setForms(forms)
-      }
+      setForms(await saveForm(forms, newForm));
 
-      console.log('curentForm.values', curentForm.values)
       get_values(curentForm.values)
     }
 
@@ -129,9 +114,9 @@ const Formly: FunctionComponent<Props> = ({ form_name, fields, get_values }) => 
   return (
     <>
       <pre>
-        <code>{JSON.stringify(forms, null, 2)}</code>
+        <code>{JSON.stringify(curentForm, null, 2)}</code>
       </pre>
-      {fields.map((field) => {
+      {curentForm.fields.map((field) => {
         return <Field key={field.name} form_name={form_name} field={field} changeValue={onChange} />;
       })}
     </>

@@ -5,14 +5,16 @@ import { validate } from './validation';
 
 export async function saveForm (forms: IForm[], newForm: IForm): Promise<IForm[]> {
 	const form = forms.find((form: IForm) => form.form_name === newForm.form_name);
-    if (!form) {
-      forms = [...forms, newForm];
-    } else {
-      forms = forms.map((form: IForm) =>
-				form.form_name === newForm.form_name ? newForm : form
-			);
-    }
-	return forms
+	let _forms: IForm[] = [];
+
+	if (!form) {
+		_forms = [...forms, newForm];
+	} else {
+		_forms = forms.map((form: IForm) =>
+			form.form_name === newForm.form_name ? newForm : form
+		);
+	}
+	return _forms
 }
 
 // export async function getFormByName(form_name: string): Promise<IForm | null> {

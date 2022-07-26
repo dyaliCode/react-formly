@@ -1,8 +1,8 @@
 import React, { ComponentClass, FunctionComponent } from 'react'
-import { IField, IPropsField } from '../../utils/types';
+import { IField, IPropsField } from '../utils/types';
 
 // Field component.
-import Input from './Input';
+import Input from './fields/Input';
 
 const components: any = {
   input: Input,
@@ -24,7 +24,8 @@ const Field: FunctionComponent<IPropsField> = ({ form_name, field, changeValue }
 
   return (
     <>
-      <label htmlFor={field.attributes.id}>{field.attributes.label}</label>
+      {field.attributes.label && <label htmlFor={field.attributes.id}>{field.attributes.label}</label>}
+    
       <FieldComponent key={field.name} form_name={form_name} field={field} changeValue={onChange} />
     </>
   )
