@@ -5,7 +5,6 @@ import {
   type IForm,
   preprocess_and_validate_field,
   saveForm,
-  validate,
   // type IBtnSubmit,
   // type IBtnReset
 } from "../utils";
@@ -23,14 +22,14 @@ const Formly: FunctionComponent<Props> = ({
   get_values,
 }) => {
   const [forms, setForms] = useState<IForm[]>([]);
-  const [_fields, _setFields] = useState<IField[]>(fields);
-  const [_values, _setValues] = useState<any>({});
   const [currentForm, setCurrentForm] = useState<IForm>({
     form_name,
     fields: fields,
     values: {},
     valid: true,
   });
+  const [_fields, _setFields] = useState<IField[]>(fields);
+  const [_values, _setValues] = useState<any>({});
 
   useEffect(() => {
     async function init() {
@@ -125,13 +124,14 @@ const Formly: FunctionComponent<Props> = ({
   };
 
   // Submit form.
-  const onSubmit = async (): Promise<void> => {
-    // const values = await getValues(form_name);
-    // dispatch('submit', { ...values, valid: current_form.valid });
+  const onSubmit = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+    console.log("currentForm.values", currentForm.values);
   };
 
   // Reset form.
-  const onReset = async (): Promise<void> => {
+  const onReset = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
     let values: any = {};
     let __fields: any = await Promise.all(
       currentForm.fields.map(async (field: IField) => {

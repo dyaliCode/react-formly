@@ -28,23 +28,43 @@ const Home: NextPage = () => {
       name: "username",
       value: "kamalkech",
       attributes: {
+        type: "number",
         id: "username",
         label: "Username",
         classes: ["py-3", "px-4", "rounded-lg", "border-gray-300", "border-2"],
+        autocomplete: "off",
       },
-      rules: ["required"],
+      // rules: ["required"],
     },
     {
       type: "input",
       name: "password",
       value: "password",
       attributes: {
-        type: "password",
+        type: "number",
         id: "password",
         label: "Password",
         classes: ["py-3", "px-4", "rounded-lg", "border-gray-300", "border-2"],
+        autocomplete: "off",
       },
-      rules: ["required", { name: "confirmed", fnc: confirmed }],
+      // rules: ["required", { name: "confirmed", fnc: confirmed }],
+    },
+    {
+      type: "input",
+      name: "total",
+      value: "total",
+      attributes: {
+        type: "number",
+        id: "total",
+        label: "total",
+        classes: ["py-3", "px-4", "rounded-lg", "border-gray-300", "border-2"],
+        autocomplete: "off",
+      },
+      // rules: ["required", { name: "confirmed", fnc: confirmed }],
+      preprocess: (field: IField, fields: IField[], _values: any) => {
+        field.value = _values.username + _values.password;
+        return field;
+      },
     },
   ];
 
