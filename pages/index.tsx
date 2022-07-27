@@ -7,6 +7,7 @@ const Home: NextPage = () => {
   const [values, setValues] = useState<any>(null);
 
   const onGetValues = async (data: any) => {
+    console.log("data", data);
     setValues(data);
   };
 
@@ -70,7 +71,7 @@ const Home: NextPage = () => {
 
   return (
     <div className="max-w-screen-xl m-auto p-4 flex flex-col space-y-2 ">
-      <Formly fields={fields} form_name={form_name} get_values={onGetValues} />
+      <Formly fields={fields} form_name={form_name} />
     </div>
   );
 };

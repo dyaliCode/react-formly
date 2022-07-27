@@ -47,4 +47,4 @@ const Field: FunctionComponent<IPropsField> = ({
   );
 };
 
-export default Field;
+export default memo(Field);

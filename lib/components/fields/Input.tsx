@@ -60,4 +60,4 @@ const Input: FunctionComponent<IPropsField> = ({
   );
 };
 
-export default Input;
+export default memo(Input);

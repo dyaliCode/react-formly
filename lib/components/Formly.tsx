@@ -13,7 +13,7 @@ import Field from "./Field";
 type Props = {
   form_name: string;
   fields: IField[];
-  get_values: Function;
+  get_values?: Function;
 };
 
 const Formly: FunctionComponent<Props> = ({
@@ -21,6 +21,7 @@ const Formly: FunctionComponent<Props> = ({
   fields,
   get_values,
 }) => {
+  console.log("222", 222);
   const [forms, setForms] = useState<IForm[]>([]);
   const [currentForm, setCurrentForm] = useState<IForm>({
     form_name,
@@ -73,7 +74,7 @@ const Formly: FunctionComponent<Props> = ({
       setForms(await saveForm(forms, newForm));
 
       // Dispatch values.
-      get_values(_values);
+      get_values && get_values(_values);
     }
 
     init();
@@ -120,7 +121,7 @@ const Formly: FunctionComponent<Props> = ({
     setForms(await saveForm(forms, newForm));
 
     // Dispatch values.
-    get_values(_values);
+    get_values && get_values(_values);
   };
 
   // Submit form.
@@ -152,7 +153,7 @@ const Formly: FunctionComponent<Props> = ({
     setForms(await saveForm(forms, _currentForm));
 
     // Dispatch values.
-    get_values(_values);
+    get_values && get_values(_values);
   };
 
   return (
@@ -188,4 +189,4 @@ const Formly: FunctionComponent<Props> = ({
   );
 };
 
-export default Formly;
+export default memo(Formly);
