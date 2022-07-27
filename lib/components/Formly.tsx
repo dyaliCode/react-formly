@@ -1,126 +1,191 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState, memo } from "react";
 import {
   // isFieldDuplicated,
   type IField,
   type IForm,
   preprocess_and_validate_field,
   saveForm,
+  validate,
   // type IBtnSubmit,
   // type IBtnReset
-} from '../utils';
-import Field from './Field';
+} from "../utils";
+import Field from "./Field";
 
 type Props = {
-  form_name: string
-  fields: IField[],
-  get_values: Function
-}
+  form_name: string;
+  fields: IField[];
+  get_values: Function;
+};
 
-const Formly: FunctionComponent<Props> = ({ form_name, fields, get_values }) => {
-
-  const [forms, setForms] = useState<IForm[]>([])
-  const [curentForm, setCurrentForm] = useState<IForm>({
+const Formly: FunctionComponent<Props> = ({
+  form_name,
+  fields,
+  get_values,
+}) => {
+  const [forms, setForms] = useState<IForm[]>([]);
+  const [_fields, _setFields] = useState<IField[]>(fields);
+  const [_values, _setValues] = useState<any>({});
+  const [currentForm, setCurrentForm] = useState<IForm>({
     form_name,
     fields: fields,
     values: {},
-    valid: true
+    valid: true,
   });
-
-  const onChange = async (data: any): Promise<void> => {
-    let values = curentForm.values;
-
-		const _fields = await Promise.all(
-			curentForm.fields.map(async (field: IField) => {
-				if (field.name === data.field_name) {
-					values['touched'] = field.name;
-					field.value = data.value;
-					values[`${field.name}`] = data.value;
-				}
-
-				// Preprocess and validate field.
-				field = await preprocess_and_validate_field(curentForm, field, values);
-
-				return field;
-			})
-		);
-
-		// Find dirty in the current form.
-		const dirty = _fields.find((field: IField) => {
-			if (field.validation) {
-				return field.validation.dirty === true;
-			}
-		});
-
-		const newForm = { ...curentForm, fields: _fields, values, valid: dirty ? false : true };
-    setCurrentForm(newForm);
-
-		// Update forms.
-    setForms(await saveForm(forms, newForm))
-    
-    get_values(curentForm.values)
-  }
-
-  // Submit form.
-	const onSubmit = async (): Promise<void> => {
-		// const values = await getValues(form_name);
-		// dispatch('submit', { ...values, valid: current_form.valid });
-	};
-
-	// Reset form.
-	const onReset = async (): Promise<void> => {
-		// Object.keys(values).forEach((key) => {
-		// 	values[key] = null;
-		// });
-		// await storeForms.resetValues(form_name);
-		// current_form.values = values;
-	};
 
   useEffect(() => {
     async function init() {
-      let values: any =  curentForm.values ?? {};
+      let values: any = currentForm.values ?? {};
 
-      await Promise.all(
-        fields.map(async (field: IField) => {
+      const fields_updated = await Promise.all(
+        _fields.map(async (field: IField) => {
           values[`${field.name}`] = field.value ?? null;
           // Preprocess and validate field.
-          field = await preprocess_and_validate_field(curentForm, field, values);
+          field = await preprocess_and_validate_field(
+            currentForm,
+            field,
+            values
+          );
           return field;
         })
       );
 
+      _setFields(fields_updated);
+
       // Find dirty in the current form.
-      const dirty = fields.find((field: IField) => {
+      const dirty = fields_updated.find((field: IField) => {
         if (field.validation) {
           return field.validation.dirty === true;
         }
       });
 
-      const newForm = { ...curentForm, fields: fields, values, valid: dirty ? false : true };
+      // Values.
+      _setValues(values);
+
+      // Form.
+      const newForm = {
+        ...currentForm,
+        fields: fields_updated,
+        values,
+        valid: dirty ? false : true,
+      };
       setCurrentForm(newForm);
 
-      console.log('newForm', newForm)
-
-      // Forms.
+      // Save forms.
       setForms(await saveForm(forms, newForm));
 
-      get_values(curentForm.values)
+      // Dispatch values.
+      get_values(_values);
     }
 
     init();
-  
-  }, [fields, form_name])
-  
+  }, [fields, form_name]);
+
+  const onChange = async (data: any): Promise<void> => {
+    let values = currentForm.values;
+
+    const _fields = await Promise.all(
+      currentForm.fields.map(async (field: IField) => {
+        if (field.name === data.field_name) {
+          values["touched"] = field.name;
+          field.value = data.value;
+          values[`${field.name}`] = data.value;
+        }
+
+        // Preprocess and validate field.
+        field = await preprocess_and_validate_field(currentForm, field, values);
+
+        return field;
+      })
+    );
+
+    // Find dirty in the current form.
+    const dirty = _fields.find((field: IField) => {
+      if (field.validation) {
+        return field.validation.dirty === true;
+      }
+    });
+
+    // Values.
+    _setValues(values);
+
+    // Form.
+    const newForm = {
+      ...currentForm,
+      fields: _fields,
+      values: values,
+      valid: dirty ? false : true,
+    };
+    setCurrentForm(newForm);
+
+    // Save forms.
+    setForms(await saveForm(forms, newForm));
+
+    // Dispatch values.
+    get_values(_values);
+  };
+
+  // Submit form.
+  const onSubmit = async (): Promise<void> => {
+    // const values = await getValues(form_name);
+    // dispatch('submit', { ...values, valid: current_form.valid });
+  };
+
+  // Reset form.
+  const onReset = async (): Promise<void> => {
+    let values: any = {};
+    let __fields: any = await Promise.all(
+      currentForm.fields.map(async (field: IField) => {
+        field.value = null;
+        values[field.name] = null;
+        field = await preprocess_and_validate_field(currentForm, field, values);
+        return field;
+      })
+    );
+
+    const _currentForm = { ...currentForm, fields: __fields, values };
+
+    _setFields(__fields);
+
+    setCurrentForm(_currentForm);
+
+    // Save forms.
+    setForms(await saveForm(forms, _currentForm));
+
+    // Dispatch values.
+    get_values(_values);
+  };
 
   return (
     <>
       <pre>
-        <code>{JSON.stringify(curentForm, null, 2)}</code>
+        <code>{JSON.stringify(currentForm, null, 2)}</code>
       </pre>
-      {curentForm.fields.map((field) => {
-        return <Field key={field.name} form_name={form_name} field={field} changeValue={onChange} />;
-      })}
-    </>
-  )
-}
+      <hr />
+      <form
+        className="max-w-screen-xl m-full p-4 flex flex-col space-y-2"
+        onSubmit={onSubmit}
+        onReset={onReset}
+      >
+        {currentForm.fields.map((field) => {
+          return (
+            <Field
+              key={field.name}
+              form_name={form_name}
+              field={field}
+              changeValue={onChange}
+            />
+          );
+        })}
 
-export default Formly
+        <button className="" type="submit">
+          submit
+        </button>
+        <button className="" type="reset">
+          reset
+        </button>
+      </form>
+    </>
+  );
+};
+
+export default Formly;
