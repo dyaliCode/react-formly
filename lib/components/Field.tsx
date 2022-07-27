@@ -5,13 +5,14 @@ import { IField, IPropsField } from "../utils/types";
 import Input from "./fields/Input";
 import Select from "./fields/Select";
 import Textarea from "./fields/Textarea";
+import Checkbox from "./fields/Checkbox";
 
 const components: any = {
   input: Input,
   select: Select,
   // file: File,
   textarea: Textarea,
-  // checkbox: Checkbox,
+  checkbox: Checkbox,
   // radio: Radio,
   // autocomplete: AutoComplete
 };

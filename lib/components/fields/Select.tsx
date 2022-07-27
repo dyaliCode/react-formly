@@ -97,4 +97,4 @@ const Select: FunctionComponent<IPropsField> = ({
   );
 };
 
-export default Select;
+export default memo(Select);

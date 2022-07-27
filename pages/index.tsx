@@ -3,66 +3,62 @@ import Formly from "@/lib/components/Formly";
 import { IField } from "@/lib/utils/types";
 import { useEffect, useState } from "react";
 
-// Fetch items
-const fetchItems = async (category_id: any) => {
-  console.log("typeof category_id", typeof category_id);
-  const url = `https://jsonplaceholder.cypress.io/${
-    category_id === "1" ? "users" : "posts"
-  }?_limit=10`;
-
-  const res = await fetch(url);
-  const data = await res.json();
-
-  if (category_id === "1") {
-    return data.map((item: any) => ({ value: item.id, title: item.name }));
-  } else {
-    return data.map((item: any) => ({ value: item.id, title: item.title }));
-  }
-};
-
 const Home: NextPage = () => {
+  const form_name = "starting";
   const _fields: IField[] = [
     {
-      type: "select",
-      name: "category",
+      type: "checkbox",
+      name: "check1",
       attributes: {
-        id: "category",
-        label: "Category",
+        id: "check1",
+        label: "Checkbox Default:",
+        classes: ["checker"],
       },
-      rules: ["required"],
       extra: {
-        options: [
+        items: [
           {
-            value: null,
-            title: "None",
+            name: "item1",
+            value: "value1",
+            title: "Value 1",
           },
           {
-            value: 1,
-            title: "Users",
-          },
-          {
-            value: 2,
-            title: "Posts",
+            name: "item2",
+            value: "value2",
+            title: "Value 2",
           },
         ],
       },
+      prefix: {
+        tag: "tag",
+        classes: ["form-group"],
+      },
     },
     {
-      type: "select",
-      name: "items",
+      type: "checkbox",
+      name: "check2",
       attributes: {
-        id: "items",
-        label: "Items",
+        id: "check2",
+        label: "Checkbox Inline:",
+        classes: ["checker"],
       },
-      extra: {},
-      preprocess: async (field: IField, fields: IField[], values: any) => {
-        console.log("values", values);
-        if (values.touched === "category") {
-          setLoading(true);
-          field.extra.options = await fetchItems(values.category);
-          setLoading(false);
-        }
-        return field;
+      extra: {
+        aligne: "inline",
+        items: [
+          {
+            name: "item1",
+            value: "value1",
+            title: "Value 1",
+          },
+          {
+            name: "item2",
+            value: "value2",
+            title: "Value 2",
+          },
+        ],
+      },
+      prefix: {
+        tag: "div",
+        classes: ["form-group"],
       },
     },
   ];
@@ -78,27 +74,12 @@ const Home: NextPage = () => {
     console.log("onSubmit", data);
   };
 
-  const form_name = "starting";
-
-  async function confirmed(): Promise<boolean> {
-    if (values) {
-      if (values.username != values.password) {
-        return false;
-      }
-      return true;
-    }
-    return false;
-  }
-
-  const [loading, setLoading] = useState<boolean>(false);
-
   useEffect(() => {
     setFields(_fields);
   }, []);
 
   return (
     <div className="max-w-screen-xl m-auto p-4 flex flex-col space-y-2 ">
-      <p>fetch: {loading ? "loading" : "done!"}</p>
       {fields && (
         <Formly
           fields={fields}
