@@ -14,12 +14,15 @@ type Props = {
   form_name: string;
   fields: IField[];
   get_values?: Function;
+  onSubmit: Function;
+  onReset?: Function;
 };
 
 const Formly: FunctionComponent<Props> = ({
   form_name,
   fields,
   get_values,
+  onSubmit,
 }) => {
   console.log("222", 222);
   const [forms, setForms] = useState<IForm[]>([]);
@@ -125,9 +128,9 @@ const Formly: FunctionComponent<Props> = ({
   };
 
   // Submit form.
-  const onSubmit = async (e: React.FormEvent): Promise<void> => {
+  const onSubmitHandler = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    console.log("currentForm.values", currentForm.values);
+    onSubmit({ values: currentForm.values, valid: currentForm.valid });
   };
 
   // Reset form.
@@ -164,7 +167,7 @@ const Formly: FunctionComponent<Props> = ({
       <hr />
       <form
         className="max-w-screen-xl m-full p-4 flex flex-col space-y-2"
-        onSubmit={onSubmit}
+        onSubmit={onSubmitHandler}
         onReset={onReset}
       >
         {currentForm.fields.map((field) => {
