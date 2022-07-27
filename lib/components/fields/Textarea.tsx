@@ -15,13 +15,10 @@ const Input: FunctionComponent<IPropsField> = ({
 }: IPropsField) => {
   const [value, setValue] = useState(field.value ?? "");
 
-  const onInput: FormEventHandler<HTMLInputElement> = async (
-    event: React.FormEvent<HTMLInputElement>
+  const onInput: FormEventHandler<HTMLTextAreaElement> = async (
+    event: React.FormEvent<HTMLTextAreaElement>
   ): Promise<void> => {
-    const _value: string | number =
-      field.attributes.type === "number"
-        ? parseInt(event.currentTarget.value)
-        : event.currentTarget.value;
+    const _value: string = event.currentTarget.value;
 
     setValue(_value);
 
@@ -39,23 +36,19 @@ const Input: FunctionComponent<IPropsField> = ({
   }, [field.value]);
 
   return (
-    <input
-      type={field.attributes.type ? field.attributes.type : "text"}
+    <textarea
       name={field.name}
-      value={value}
-      id={field.attributes.id ? field.attributes.id : field.name}
       className={
         field.attributes.classes ? field.attributes.classes.join(" ") : ""
       }
+      value={value}
       placeholder={field.attributes.placeholder}
       required={isRequired(field)}
       disabled={field.attributes.disabled}
       readOnly={field.attributes.readonly}
-      min={field.attributes.min}
-      max={field.attributes.max}
-      step={field.attributes.step}
-      autoComplete={field.attributes.autocomplete}
-      onChange={onInput}
+      rows={field.attributes.rows}
+      cols={field.attributes.cols}
+      onInput={onInput}
     />
   );
 };

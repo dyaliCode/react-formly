@@ -24,7 +24,6 @@ const Formly: FunctionComponent<Props> = ({
   get_values,
   onSubmit,
 }) => {
-  console.log("222", 222);
   const [forms, setForms] = useState<IForm[]>([]);
   const [currentForm, setCurrentForm] = useState<IForm>({
     form_name,
@@ -161,9 +160,9 @@ const Formly: FunctionComponent<Props> = ({
 
   return (
     <>
-      <pre>
+      {/* <pre>
         <code>{JSON.stringify(currentForm, null, 2)}</code>
-      </pre>
+      </pre> */}
       <hr />
       <form
         className="max-w-screen-xl m-full p-4 flex flex-col space-y-2"

@@ -3,12 +3,14 @@ import { IField, IPropsField } from "../utils/types";
 
 // Field component.
 import Input from "./fields/Input";
+import Select from "./fields/Select";
+import Textarea from "./fields/Textarea";
 
 const components: any = {
   input: Input,
-  // select: Select,
+  select: Select,
   // file: File,
-  // textarea: Textarea,
+  textarea: Textarea,
   // checkbox: Checkbox,
   // radio: Radio,
   // autocomplete: AutoComplete
