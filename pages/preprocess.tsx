@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 // Fetch items
 const fetchItems = async (category_id: any) => {
-  console.log("typeof category_id", typeof category_id);
   const url = `https://jsonplaceholder.cypress.io/${
     category_id === "1" ? "users" : "posts"
   }?_limit=10`;
@@ -60,6 +59,7 @@ const Home: NextPage = () => {
         if (values.touched === "category") {
           setLoading(true);
           field.extra.options = await fetchItems(values.category);
+          field.value = field.extra.options[0].value;
           setLoading(false);
         }
         return field;
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <div className="max-w-screen-xl m-auto p-4 flex flex-col space-y-2 ">
+    <div className="container max-w-screen-xl m-auto p-4 flex flex-col space-y-2 ">
       <p>fetch: {loading ? "loading" : "done!"}</p>
       {fields && (
         <Formly
