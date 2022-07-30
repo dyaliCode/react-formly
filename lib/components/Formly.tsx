@@ -1,4 +1,11 @@
-import React, { FunctionComponent, useEffect, useState, memo } from "react";
+import React, {
+  FunctionComponent,
+  useEffect,
+  useState,
+  memo,
+  useRef,
+  FormHTMLAttributes,
+} from "react";
 import {
   // isFieldDuplicated,
   type IField,
@@ -24,6 +31,7 @@ const Formly: FunctionComponent<Props> = ({
   get_values,
   onSubmit,
 }) => {
+  const elForm: any = useRef();
   const [forms, setForms] = useState<IForm[]>([]);
   const [currentForm, setCurrentForm] = useState<IForm>({
     form_name,
@@ -134,7 +142,8 @@ const Formly: FunctionComponent<Props> = ({
 
   // Reset form.
   const onReset = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
+    // e.preventDefault();
+    elForm.current.reset();
     let values: any = {};
     let __fields: any = await Promise.all(
       currentForm.fields.map(async (field: IField) => {
@@ -165,6 +174,7 @@ const Formly: FunctionComponent<Props> = ({
       </pre> */}
       <hr />
       <form
+        ref={elForm}
         className="max-w-screen-xl m-full p-4 flex flex-col space-y-2"
         onSubmit={onSubmitHandler}
         onReset={onReset}

@@ -6,6 +6,7 @@ import Input from "./fields/Input";
 import Select from "./fields/Select";
 import Textarea from "./fields/Textarea";
 import Checkbox from "./fields/Checkbox";
+import Radio from "./fields/Radio";
 
 const components: any = {
   input: Input,
@@ -13,7 +14,7 @@ const components: any = {
   // file: File,
   textarea: Textarea,
   checkbox: Checkbox,
-  // radio: Radio,
+  radio: Radio,
   // autocomplete: AutoComplete
 };
 

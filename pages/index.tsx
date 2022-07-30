@@ -7,54 +7,29 @@ const Home: NextPage = () => {
   const form_name = "starting";
   const _fields: IField[] = [
     {
-      type: "checkbox",
-      name: "check1",
+      type: "radio", // required
+      name: "name-field-radio", // required
+      // value: 1,
       attributes: {
-        id: "check1",
-        label: "Checkbox Default:",
-        classes: ["checker"],
+        id: "id-field-radio", // required
+        classes: ["form-check-input"], // optional
+        label: "First",
       },
+      rules: ["required"],
       extra: {
         items: [
           {
-            name: "item1",
-            value: "value1",
-            title: "Value 1",
+            id: "radio1",
+            value: 1,
+            title: "radio 1",
           },
           {
-            name: "item2",
-            value: "value2",
-            title: "Value 2",
+            id: "radio2",
+            value: 2,
+            title: "radio 2",
           },
         ],
-      },
-      prefix: {
-        tag: "tag",
-        classes: ["form-group"],
-      },
-    },
-    {
-      type: "checkbox",
-      name: "check2",
-      attributes: {
-        id: "check2",
-        label: "Checkbox Inline:",
-        classes: ["checker"],
-      },
-      extra: {
         aligne: "inline",
-        items: [
-          {
-            name: "item1",
-            value: "value1",
-            title: "Value 1",
-          },
-          {
-            name: "item2",
-            value: "value2",
-            title: "Value 2",
-          },
-        ],
       },
       prefix: {
         tag: "div",
@@ -74,12 +49,22 @@ const Home: NextPage = () => {
     console.log("onSubmit", data);
   };
 
+  const onSwitch = async () => {
+    const __fields: IField[] = fields;
+    __fields[0].value = __fields[0].value === 1 ? 2 : 1;
+    setFields([...__fields]);
+  };
+
   useEffect(() => {
     setFields(_fields);
   }, []);
 
   return (
-    <div className="max-w-screen-xl m-auto p-4 flex flex-col space-y-2 ">
+    <div className="container max-w-screen-xl m-auto p-4 flex flex-col space-y-2 ">
+      <pre>
+        <code>{JSON.stringify(fields, null, 2)}</code>
+      </pre>
+      <button onClick={onSwitch}>switch</button>
       {fields && (
         <Formly
           fields={fields}
