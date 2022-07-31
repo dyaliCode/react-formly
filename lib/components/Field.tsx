@@ -35,7 +35,6 @@ const Field: FunctionComponent<IPropsField> = ({
       {field.attributes.label && (
         <label htmlFor={field.attributes.id}>{field.attributes.label}</label>
       )}
-
       <FieldComponent
         key={field.name}
         form_name={form_name}

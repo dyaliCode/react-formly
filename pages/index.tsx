@@ -18,9 +18,9 @@ const Home: NextPage = () => {
         multiple: true, // optional
         showPreview: true, // optional
       },
-      rules: ["file"],
+      rules: ["required", "file"],
       file: {
-        extensions: ["jpg", "gif", "png"],
+        extensions: ["jpg", "gif"],
         maxSize: 5,
       },
     },
@@ -34,7 +34,7 @@ const Home: NextPage = () => {
   };
 
   const onSubmit = async (data: any) => {
-    console.log("onSubmit", data.values);
+    console.log("onSubmit", data);
   };
 
   const onSwitch = async () => {

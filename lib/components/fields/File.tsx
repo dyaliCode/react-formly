@@ -18,19 +18,26 @@ const FieldFile: FunctionComponent<IPropsField> = ({
   const [isMultiple] = useState<boolean>(field.extra.multiple ?? false);
   const [files, setFiles] = useState<any[]>([]);
 
-  useEffect(() => {}, [field.value]);
+  useEffect(() => {
+    if (!field.value || !field.value.length) {
+      setFiles([]);
+    }
+  }, [field.value]);
 
   const onInput: FormEventHandler<HTMLInputElement> = async (
     event: React.FormEvent<HTMLInputElement>
   ): Promise<void> => {
-    const _files = (event.target as HTMLInputElement).files || [];
-    setFiles([...files, ...Array.from(_files)]);
-    console.log("files", files);
-    if (files.length > 0) {
+    let _files: FileList | any[] =
+      (event.target as HTMLInputElement).files || [];
+    _files = Array.from(_files);
+
+    setFiles(_files);
+
+    if (_files.length > 0) {
       const data = {
         form_name,
         field_name: field.name,
-        value: files,
+        value: _files,
       };
 
       changeValue(data);
@@ -52,6 +59,8 @@ const FieldFile: FunctionComponent<IPropsField> = ({
 
     setFiles(newValue);
 
+    console.log("newValue", newValue);
+
     const data = {
       form_name,
       field_name: field.name,
@@ -63,9 +72,6 @@ const FieldFile: FunctionComponent<IPropsField> = ({
 
   return (
     <>
-      <pre>
-        <code>{JSON.stringify(files, null, 2)}</code>
-      </pre>
       <input
         type="file"
         name={field.name}
@@ -76,6 +82,7 @@ const FieldFile: FunctionComponent<IPropsField> = ({
         multiple={isMultiple}
         onChange={onInput}
         ref={inputFile}
+        required={isRequired(field)}
       />
       {files.length > 0 && field.extra.showPreview
         ? files.map((file: File, indx: number) => (
