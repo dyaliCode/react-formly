@@ -1,4 +1,10 @@
-import React, { ComponentClass, FunctionComponent, memo } from "react";
+import React, {
+  ComponentClass,
+  FunctionComponent,
+  memo,
+  useEffect,
+  useState,
+} from "react";
 import { IField, IPropsField } from "../utils/types";
 
 // Field component.
@@ -8,6 +14,7 @@ import File from "./fields/File";
 import Textarea from "./fields/Textarea";
 import Checkbox from "./fields/Checkbox";
 import Radio from "./fields/Radio";
+import Message from "./Message";
 
 const components: any = {
   input: Input,
@@ -24,23 +31,68 @@ const Field: FunctionComponent<IPropsField> = ({
   field,
   changeValue,
 }: IPropsField) => {
+  const [_field, _setField] = useState<IField>(field);
   const FieldComponent: ComponentClass<any, any> = components[field.type];
+
+  useEffect(() => {
+    _setField(field);
+  }, [field]);
 
   const onChange = (data: any) => {
     changeValue(data);
   };
 
+  const createComponent = (
+    children: JSX.Element,
+    props: { tag?: string; classes?: string[] }
+  ) => {
+    return React.createElement(
+      props.tag ?? "div",
+      { className: props.classes?.join(" ") },
+      children
+    );
+  };
+
+  const renderFieldComponent = () => {
+    return (
+      <>
+        {_field.attributes.label && (
+          <label htmlFor={_field.attributes.id}>
+            {_field.attributes.label}
+          </label>
+        )}
+        <FieldComponent
+          key={_field.name}
+          form_name={form_name}
+          field={_field}
+          changeValue={onChange}
+        />
+      </>
+    );
+  };
+
+  const renderErrors = () => {
+    if (_field.validation) {
+      if (_field.validation.errors.length) {
+        return _field.validation.errors.map((error: string, indx: number) => (
+          <Message
+            key={indx}
+            error={error}
+            messages={_field.messages ? _field.messages : []}
+          />
+        ));
+      }
+    }
+  };
+
   return (
     <>
-      {field.attributes.label && (
-        <label htmlFor={field.attributes.id}>{field.attributes.label}</label>
-      )}
-      <FieldComponent
-        key={field.name}
-        form_name={form_name}
-        field={field}
-        changeValue={onChange}
-      />
+      {_field.prefix?.tag
+        ? createComponent(renderFieldComponent(), _field.prefix)
+        : renderFieldComponent()}
+
+      {/* Errors */}
+      {renderErrors()}
     </>
   );
 };

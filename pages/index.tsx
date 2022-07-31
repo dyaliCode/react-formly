@@ -18,10 +18,14 @@ const Home: NextPage = () => {
         multiple: true, // optional
         showPreview: true, // optional
       },
-      rules: ["required", "file"],
+      rules: ["file"],
       file: {
         extensions: ["jpg", "gif"],
         maxSize: 5,
+      },
+      prefix: {
+        tag: "div",
+        classes: ["prefix"],
       },
     },
   ];
@@ -49,9 +53,6 @@ const Home: NextPage = () => {
 
   return (
     <div className="container max-w-screen-xl m-auto p-4 flex flex-col space-y-2 ">
-      <pre>
-        <code>{JSON.stringify(fields, null, 2)}</code>
-      </pre>
       <button onClick={onSwitch}>switch</button>
       {fields && (
         <Formly

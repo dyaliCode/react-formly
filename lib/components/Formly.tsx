@@ -31,6 +31,8 @@ const Formly: FunctionComponent<Props> = ({
   get_values,
   onSubmit,
 }) => {
+  console.log("fields", fields);
+
   const elForm: any = useRef();
   const [forms, setForms] = useState<IForm[]>([]);
   const [currentForm, setCurrentForm] = useState<IForm>({
@@ -68,6 +70,8 @@ const Formly: FunctionComponent<Props> = ({
         }
       });
 
+      // console.log("fields_updated", fields_updated);
+
       // Values.
       _setValues(values);
 
@@ -78,6 +82,7 @@ const Formly: FunctionComponent<Props> = ({
         values,
         valid: dirty ? false : true,
       };
+      // console.log("newForm", newForm);
       setCurrentForm(newForm);
 
       // Save forms.
@@ -88,7 +93,7 @@ const Formly: FunctionComponent<Props> = ({
     }
 
     init();
-  }, [fields, form_name]);
+  }, [fields]);
 
   const onChange = async (data: any): Promise<void> => {
     let values = currentForm.values;
@@ -169,6 +174,13 @@ const Formly: FunctionComponent<Props> = ({
 
   return (
     <>
+      {currentForm ? (
+        <pre>
+          <code>{JSON.stringify(currentForm, null, 2)}</code>
+        </pre>
+      ) : (
+        ""
+      )}
       <form
         ref={elForm}
         className="max-w-screen-xl m-full p-4 flex flex-col space-y-2"
