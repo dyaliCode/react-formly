@@ -169,10 +169,6 @@ const Formly: FunctionComponent<Props> = ({
 
   return (
     <>
-      {/* <pre>
-        <code>{JSON.stringify(currentForm, null, 2)}</code>
-      </pre> */}
-      <hr />
       <form
         ref={elForm}
         className="max-w-screen-xl m-full p-4 flex flex-col space-y-2"

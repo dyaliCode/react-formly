@@ -4,6 +4,7 @@ import { IField, IPropsField } from "../utils/types";
 // Field component.
 import Input from "./fields/Input";
 import Select from "./fields/Select";
+import File from "./fields/File";
 import Textarea from "./fields/Textarea";
 import Checkbox from "./fields/Checkbox";
 import Radio from "./fields/Radio";
@@ -11,7 +12,7 @@ import Radio from "./fields/Radio";
 const components: any = {
   input: Input,
   select: Select,
-  // file: File,
+  file: File,
   textarea: Textarea,
   checkbox: Checkbox,
   radio: Radio,
@@ -31,12 +32,6 @@ const Field: FunctionComponent<IPropsField> = ({
 
   return (
     <>
-      {/* {field && (
-        <pre>
-          <code>{JSON.stringify(field, null, 2)}</code>
-        </pre>
-      )} */}
-
       {field.attributes.label && (
         <label htmlFor={field.attributes.id}>{field.attributes.label}</label>
       )}

@@ -7,33 +7,21 @@ const Home: NextPage = () => {
   const form_name = "starting";
   const _fields: IField[] = [
     {
-      type: "radio", // required
-      name: "name-field-radio", // required
-      // value: 1,
+      type: "file", // required
+      name: "name_file", // require
       attributes: {
-        id: "id-field-radio", // required
-        classes: ["form-check-input"], // optional
-        label: "First",
+        id: "id-field", // optional
+        classes: ["form-control"], // optional
+        label: "Image", // optional
       },
-      rules: ["required"],
       extra: {
-        items: [
-          {
-            id: "radio1",
-            value: 1,
-            title: "radio 1",
-          },
-          {
-            id: "radio2",
-            value: 2,
-            title: "radio 2",
-          },
-        ],
-        aligne: "inline",
+        multiple: true, // optional
+        showPreview: true, // optional
       },
-      prefix: {
-        tag: "div",
-        classes: ["form-group"],
+      rules: ["file"],
+      file: {
+        extensions: ["jpg", "gif", "png"],
+        maxSize: 5,
       },
     },
   ];
@@ -46,7 +34,7 @@ const Home: NextPage = () => {
   };
 
   const onSubmit = async (data: any) => {
-    console.log("onSubmit", data);
+    console.log("onSubmit", data.values);
   };
 
   const onSwitch = async () => {

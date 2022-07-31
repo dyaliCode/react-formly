@@ -55,7 +55,6 @@ const Home: NextPage = () => {
       },
       extra: {},
       preprocess: async (field: IField, fields: IField[], values: any) => {
-        console.log("values", values);
         if (values.touched === "category") {
           setLoading(true);
           field.extra.options = await fetchItems(values.category);
