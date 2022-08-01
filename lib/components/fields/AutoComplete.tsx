@@ -112,6 +112,8 @@ const AutoComplete: FunctionComponent<IPropsField> = ({
         setFilterLength(field.extra.filter_length);
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [field.extra]);
 
   // * On filter.

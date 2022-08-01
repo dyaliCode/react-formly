@@ -90,6 +90,8 @@ const Formly: FunctionComponent<Props> = ({
     }
 
     init();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fields]);
 
   // * On change value field.

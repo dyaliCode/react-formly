@@ -24,6 +24,8 @@ const Select: FunctionComponent<IPropsField> = ({
     }
 
     setValue(field.value ?? "");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [field.value]);
 
   // * On input.

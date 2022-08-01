@@ -93,6 +93,8 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     setFields(_fields);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
