@@ -7,7 +7,9 @@ import React, {
 } from "react";
 
 import { isRequired, IPropsField, AutoCompleteItems } from "../../utils";
+import { useOutsideClick } from "../../hooks/index";
 
+// ! Start Styles
 const styleAutocompleteWrapper: any = {
   position: "relative",
   width: "100%",
@@ -38,6 +40,7 @@ const styleDeselect: any = {
   width: "15px",
   height: "15px",
   padding: "2px 7px 3px 7px",
+  marginLeft: "7px",
   fontSize: "0.6rem",
   backgroundColor: "#333333",
   border: "solid 1px rgba(255, 255, 255, 0.2)",
@@ -78,24 +81,27 @@ const styleDone: any = {
   color: "white",
   textAlign: "center",
 };
+// ! End Styles
 
 const AutoComplete: FunctionComponent<IPropsField> = ({
   form_name,
   field,
   changeValue,
 }: IPropsField) => {
-  const [value, setValue] = useState(field.value ?? "");
+  const [value, setValue] = useState<string>("");
   const [items, setItems] = useState<AutoCompleteItems[]>([]);
   const [itemsFiltered, setItemsFiltered] = useState<AutoCompleteItems[]>([]);
   const [selectedItems, setSelectedItems] = useState<AutoCompleteItems[]>([]);
   const [showList, setShowList] = useState<boolean>(false);
-  const [filterLength, setFilterLength] = useState<number>(3);
+  const [filterLength, setFilterLength] = useState<number>(
+    field.extra?.filter_lenght ?? 0
+  );
   const [hover, setHover] = useState<{ hover: boolean; indx: number }>({
     hover: false,
     indx: -1,
   });
 
-  // On mount / After update.
+  // * On mount / After update.
   useEffect(() => {
     setValue(field.value ?? "");
     if (field.extra) {
@@ -108,16 +114,15 @@ const AutoComplete: FunctionComponent<IPropsField> = ({
     }
   }, [field.extra]);
 
-  // On filter.
+  // * On filter.
   const onFilter: FormEventHandler<HTMLInputElement> = async (
     event: React.FormEvent<HTMLInputElement>
   ) => {
     const keyword = event.currentTarget.value;
-    console.log("keyword.length, filterLength", keyword.length, filterLength);
 
     setValue(keyword);
 
-    if (keyword.length > filterLength) {
+    if (keyword.length >= filterLength) {
       const filtered = items.filter((item: any) => {
         return item.title.toLowerCase().includes(keyword.toLowerCase());
       });
@@ -134,11 +139,8 @@ const AutoComplete: FunctionComponent<IPropsField> = ({
     }
   };
 
-  // On select.
+  // * On select.
   const onSelectItem = (item: any) => (e: React.MouseEvent<HTMLLIElement>) => {
-    // showList = false;
-    // setValue("");
-
     const _items = items.filter(
       (_item: AutoCompleteItems) => _item.value !== item.value
     );
@@ -147,6 +149,7 @@ const AutoComplete: FunctionComponent<IPropsField> = ({
     const _itemsFiltered = itemsFiltered.filter(
       (_item: AutoCompleteItems) => _item.value !== item.value
     );
+    setItemsFiltered(_itemsFiltered);
 
     const _selectedItems = [...selectedItems, item];
     setSelectedItems(_selectedItems);
@@ -155,16 +158,18 @@ const AutoComplete: FunctionComponent<IPropsField> = ({
       setShowList(false);
     }
 
-    // dispatch('changeValue', {
-    // 	name: field.name,
-    // 	value: selectedItems
-    // });
+    const data = {
+      form_name,
+      field_name: field.name,
+      value: _selectedItems,
+    };
+
+    changeValue(data);
   };
 
-  // On deselect.
+  // * On deselect.
   const onDeselectItem =
     (item: any) => async (e: React.MouseEvent<HTMLSpanElement>) => {
-      // showList = false;
       const _selectedItems = await selectedItems.filter(
         (_item) => _item.value !== item.value
       );
@@ -176,26 +181,29 @@ const AutoComplete: FunctionComponent<IPropsField> = ({
       const _itemsFiltered = [...itemsFiltered, item];
       setItemsFiltered(_itemsFiltered);
 
-      // dispatch('changeValue', {
-      // 	name: field.name,
-      // 	value: selectedItems
-      // });
+      const data = {
+        form_name,
+        field_name: field.name,
+        value: _selectedItems,
+      };
+
+      changeValue(data);
     };
 
-  // On click outside.
+  // * On click outside.
   const onClickOutside = (e: any) => {
     setShowList(false);
   };
 
+  // * Hide List items if click outside.
+  const refListItems: any = useOutsideClick(onClickOutside);
+
   return (
     <div className="autocomplete-wrapper" style={styleAutocompleteWrapper}>
-      <pre>
-        <code>{JSON.stringify(itemsFiltered, null, 2)}</code>
-      </pre>
       <div className="selected-items" style={styleSelectedItems}>
         {selectedItems &&
           selectedItems.map((item: AutoCompleteItems, indx: number) => (
-            <div key={indx} className="item">
+            <div key={indx} className="item" style={{ ...styleItem }}>
               <span>{item.title}</span>
               <span
                 className="deselect"
@@ -228,8 +236,8 @@ const AutoComplete: FunctionComponent<IPropsField> = ({
         onInput={onFilter}
       />
 
-      {itemsFiltered.length && showList && (
-        <div className="list-items" style={listItems}>
+      {itemsFiltered.length > 0 && showList && (
+        <div ref={refListItems} className="list-items" style={listItems}>
           <ul style={styleUlLi}>
             {itemsFiltered.map((item: AutoCompleteItems, indx: number) => (
               <li
@@ -255,7 +263,7 @@ const AutoComplete: FunctionComponent<IPropsField> = ({
               className="done"
               onClick={() => {
                 setShowList(false);
-                setValue(null);
+                setValue("");
               }}
             >
               Close

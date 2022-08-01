@@ -15,7 +15,7 @@ const Home: NextPage = () => {
         autocomplete: "off", // optional
       },
       extra: {
-        filter_lenght: 3, // optional and by default = 0
+        filter_lenght: 2, // optional and by default = 0
         loadItemes: [
           // required
           // list items with id and title attributes.
