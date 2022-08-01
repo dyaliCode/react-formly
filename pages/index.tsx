@@ -7,25 +7,35 @@ const Home: NextPage = () => {
   const form_name = "starting";
   const _fields: IField[] = [
     {
-      type: "file", // required
-      name: "name_file", // require
+      type: "autocomplete", // required
+      name: "name-field-autocomplete", // required
       attributes: {
-        id: "id-field", // optional
-        classes: ["form-control"], // optional
-        label: "Image", // optional
+        id: "id-field-autocomplete", // required
+        placeholder: "Tap item to select", // optional
+        autocomplete: "off", // optional
       },
       extra: {
-        multiple: true, // optional
-        showPreview: true, // optional
-      },
-      rules: ["file"],
-      file: {
-        extensions: ["jpg", "gif"],
-        maxSize: 5,
-      },
-      prefix: {
-        tag: "div",
-        classes: ["prefix"],
+        filter_lenght: 3, // optional and by default = 0
+        loadItemes: [
+          // required
+          // list items with id and title attributes.
+          {
+            value: 1,
+            title: "item 1",
+          },
+          {
+            value: 2,
+            title: "item 2",
+          },
+          {
+            value: 3,
+            title: "item 3",
+          },
+          {
+            value: 4,
+            title: "item 4",
+          },
+        ],
       },
     },
   ];

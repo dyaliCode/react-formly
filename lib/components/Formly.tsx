@@ -31,8 +31,6 @@ const Formly: FunctionComponent<Props> = ({
   get_values,
   onSubmit,
 }) => {
-  console.log("fields", fields);
-
   const elForm: any = useRef();
   const [forms, setForms] = useState<IForm[]>([]);
   const [currentForm, setCurrentForm] = useState<IForm>({
@@ -69,8 +67,6 @@ const Formly: FunctionComponent<Props> = ({
           return field.validation.dirty === true;
         }
       });
-
-      // console.log("fields_updated", fields_updated);
 
       // Values.
       _setValues(values);
