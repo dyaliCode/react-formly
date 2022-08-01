@@ -15,6 +15,12 @@ const Input: FunctionComponent<IPropsField> = ({
 }: IPropsField) => {
   const [value, setValue] = useState(field.value ?? "");
 
+  // * Init.
+  useEffect(() => {
+    setValue(field.value ?? "");
+  }, [field.value]);
+
+  // * On input.
   const onInput: FormEventHandler<HTMLInputElement> = async (
     event: React.FormEvent<HTMLInputElement>
   ): Promise<void> => {
@@ -33,10 +39,6 @@ const Input: FunctionComponent<IPropsField> = ({
 
     changeValue(data);
   };
-
-  useEffect(() => {
-    setValue(field.value ?? "");
-  }, [field.value]);
 
   return (
     <input

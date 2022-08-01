@@ -9,7 +9,7 @@ import React, {
 import { isRequired, IPropsField, AutoCompleteItems } from "../../utils";
 import { useOutsideClick } from "../../hooks/index";
 
-// ! Start Styles
+// * Start Styles
 const styleAutocompleteWrapper: any = {
   position: "relative",
   width: "100%",
@@ -81,7 +81,7 @@ const styleDone: any = {
   color: "white",
   textAlign: "center",
 };
-// ! End Styles
+// * End Styles
 
 const AutoComplete: FunctionComponent<IPropsField> = ({
   form_name,

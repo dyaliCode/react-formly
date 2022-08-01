@@ -42,6 +42,7 @@ const Formly: FunctionComponent<Props> = ({
   const [_fields, _setFields] = useState<IField[]>(fields);
   const [_values, _setValues] = useState<any>({});
 
+  // * Init formly.
   useEffect(() => {
     async function init() {
       let values: any = currentForm.values ?? {};
@@ -49,7 +50,7 @@ const Formly: FunctionComponent<Props> = ({
       const fields_updated = await Promise.all(
         _fields.map(async (field: IField) => {
           values[`${field.name}`] = field.value ?? null;
-          // Preprocess and validate field.
+          // * Preprocess and validate field.
           field = await preprocess_and_validate_field(
             currentForm,
             field,
@@ -61,36 +62,37 @@ const Formly: FunctionComponent<Props> = ({
 
       _setFields(fields_updated);
 
-      // Find dirty in the current form.
+      // * Find dirty in the current form.
       const dirty = fields_updated.find((field: IField) => {
         if (field.validation) {
           return field.validation.dirty === true;
         }
       });
 
-      // Values.
+      // * Set values.
       _setValues(values);
 
-      // Form.
+      // * Get form.
       const newForm = {
         ...currentForm,
         fields: fields_updated,
         values,
         valid: dirty ? false : true,
       };
-      // console.log("newForm", newForm);
+      // * console.log("newForm", newForm);
       setCurrentForm(newForm);
 
-      // Save forms.
+      // * Save forms.
       setForms(await saveForm(forms, newForm));
 
-      // Dispatch values.
+      // * Dispatch values.
       get_values && get_values(_values);
     }
 
     init();
   }, [fields]);
 
+  // * On change value field.
   const onChange = async (data: any): Promise<void> => {
     let values = currentForm.values;
 
@@ -102,24 +104,24 @@ const Formly: FunctionComponent<Props> = ({
           values[`${field.name}`] = data.value;
         }
 
-        // Preprocess and validate field.
+        // * Preprocess and validate field.
         field = await preprocess_and_validate_field(currentForm, field, values);
 
         return field;
       })
     );
 
-    // Find dirty in the current form.
+    // * Find dirty in the current form.
     const dirty = _fields.find((field: IField) => {
       if (field.validation) {
         return field.validation.dirty === true;
       }
     });
 
-    // Values.
+    // * Values.
     _setValues(values);
 
-    // Form.
+    // * Form.
     const newForm = {
       ...currentForm,
       fields: _fields,
@@ -128,20 +130,20 @@ const Formly: FunctionComponent<Props> = ({
     };
     setCurrentForm(newForm);
 
-    // Save forms.
+    // * Save forms.
     setForms(await saveForm(forms, newForm));
 
-    // Dispatch values.
+    // * Dispatch values.
     get_values && get_values(_values);
   };
 
-  // Submit form.
+  // * Submit form.
   const onSubmitHandler = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     onSubmit({ values: currentForm.values, valid: currentForm.valid });
   };
 
-  // Reset form.
+  // * Reset form.
   const onReset = async (e: React.FormEvent): Promise<void> => {
     // e.preventDefault();
     elForm.current.reset();

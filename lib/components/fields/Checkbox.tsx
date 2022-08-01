@@ -16,6 +16,7 @@ const Checkbox: FunctionComponent<IPropsField> = ({
   const [items, setItems] = useState<any[]>(field.extra.items ?? []);
   const [values, setValues] = useState<any[]>(field.value ?? []);
 
+  // * Init.
   useEffect(() => {
     const _items = field.extra.items.map((item: any) => {
       if (field.value && field.value.includes(item.value)) {
@@ -29,6 +30,7 @@ const Checkbox: FunctionComponent<IPropsField> = ({
     setValues(field.value ?? []);
   }, [field.extra.items, field.value]);
 
+  // * On input.
   const onInput: FormEventHandler<HTMLInputElement> = async (
     event: React.FormEvent<HTMLInputElement>
   ): Promise<void> => {

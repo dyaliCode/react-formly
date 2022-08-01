@@ -6,6 +6,7 @@ type IProps = {
 };
 
 const Message = ({ error, messages }: IProps) => {
+  // * Lite error message.
   const rules: any[] = [
     { rule: "required", message: "This field is required" },
     { rule: "min", message: "This field must be more characters long" },
@@ -18,6 +19,7 @@ const Message = ({ error, messages }: IProps) => {
     { rule: "custom_rule", message: "Error" },
   ];
 
+  // * Get messages error by rule.
   const getMessageByRule = (rule: string) => {
     const data = rules.find((r: any) => r.rule === rule);
     return data
@@ -25,6 +27,7 @@ const Message = ({ error, messages }: IProps) => {
       : rules.find((r: any) => r.rule === "custom_rule").message;
   };
 
+  // * Output error.
   const displayError = (rule: string) => {
     let message = "";
     if (messages[rule]) {
@@ -35,6 +38,7 @@ const Message = ({ error, messages }: IProps) => {
     return message;
   };
 
+  // * Render error.
   const renderError = () => {
     return <div className="invalid-feedback error">{displayError(error)}</div>;
   };

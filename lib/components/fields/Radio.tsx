@@ -15,6 +15,7 @@ const Radio: FunctionComponent<IPropsField> = ({
 }: IPropsField) => {
   const [items, setItems] = useState<any[]>(field.extra.items ?? null);
 
+  // * Init.
   useEffect(() => {
     const _items = field.extra.items.map((item: any) => {
       if (field.value === item.value) {
@@ -27,6 +28,7 @@ const Radio: FunctionComponent<IPropsField> = ({
     setItems(_items);
   }, [field, field.value, field.extra.items]);
 
+  // * On input.
   const onInput: FormEventHandler<HTMLInputElement> = async (
     event: React.FormEvent<HTMLInputElement>
   ): Promise<void> => {

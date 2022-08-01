@@ -16,7 +16,7 @@ const Select: FunctionComponent<IPropsField> = ({
   const [value, setValue] = useState(field.value ?? "");
   const [multiple, setMultiple] = useState<boolean>(false);
 
-  // Init.
+  // * Init.
   useEffect(() => {
     if (field.extra) {
       const _multiple = field.extra.multiple ? field.extra.multiple : false;
@@ -26,7 +26,7 @@ const Select: FunctionComponent<IPropsField> = ({
     setValue(field.value ?? "");
   }, [field.value]);
 
-  // On input / change.
+  // * On input.
   const onInput: FormEventHandler<HTMLSelectElement> = async (
     event: React.FormEvent<HTMLSelectElement>
   ): Promise<void> => {
@@ -52,25 +52,6 @@ const Select: FunctionComponent<IPropsField> = ({
     };
 
     changeValue(data);
-  };
-
-  // Check if option is selected.
-  const checkSelected = (
-    is_multiple: any,
-    option_value: any,
-    field_value: any
-  ): boolean => {
-    if (is_multiple) {
-      if (field_value && field_value.length) {
-        const res = field_value.indexOf(option_value) != -1;
-        return res;
-      } else if (field.value && field.value.length) {
-        const res = field.value.indexOf(option_value) != -1;
-        return res;
-      }
-      return false;
-    }
-    return option_value === field_value;
   };
 
   return (

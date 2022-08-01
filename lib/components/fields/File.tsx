@@ -18,12 +18,14 @@ const FieldFile: FunctionComponent<IPropsField> = ({
   const [isMultiple] = useState<boolean>(field.extra.multiple ?? false);
   const [files, setFiles] = useState<any[]>([]);
 
+  // * Init.
   useEffect(() => {
     if (!field.value || !field.value.length) {
       setFiles([]);
     }
   }, [field.value]);
 
+  // * On input.
   const onInput: FormEventHandler<HTMLInputElement> = async (
     event: React.FormEvent<HTMLInputElement>
   ): Promise<void> => {
@@ -44,6 +46,7 @@ const FieldFile: FunctionComponent<IPropsField> = ({
     }
   };
 
+  // * On delete file.
   const deleteFile = (e: any, file: File) => {
     e.preventDefault();
     let newValue: any;
@@ -58,8 +61,6 @@ const FieldFile: FunctionComponent<IPropsField> = ({
     }
 
     setFiles(newValue);
-
-    console.log("newValue", newValue);
 
     const data = {
       form_name,
