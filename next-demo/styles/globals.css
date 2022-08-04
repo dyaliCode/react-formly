@@ -24,3 +24,9 @@ a {
     background: black;
   }
 }
+
+.form-group {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #666;
+}

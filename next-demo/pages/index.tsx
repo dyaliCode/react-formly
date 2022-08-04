@@ -90,10 +90,12 @@ const Home: NextPage = () => {
     return false;
   }
 
+  // *
   const onSubmit = (data: any) => {
     console.log("onSubmit", data);
   };
 
+  // *
   const onChange = (data: any) => {
     console.log("onChange", data);
   };
