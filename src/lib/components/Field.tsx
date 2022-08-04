@@ -16,6 +16,7 @@ import Checkbox from "./fields/Checkbox";
 import Radio from "./fields/Radio";
 import Message from "./Message";
 import AutoComplete from "./fields/AutoComplete";
+import { createComponentWithPrefix } from "../utils";
 
 // * List field types.
 const components: any = {
@@ -43,18 +44,6 @@ const Field: FunctionComponent<IPropsField> = ({
 
   const onChange = (data: any) => {
     changeValue(data);
-  };
-
-  // * Create element tag.
-  const createComponent = (
-    children: JSX.Element,
-    props: { tag?: string; classes?: string[] }
-  ) => {
-    return React.createElement(
-      props.tag ?? "div",
-      { className: props.classes?.join(" ") },
-      children
-    );
   };
 
   // * Render element field.
@@ -96,7 +85,7 @@ const Field: FunctionComponent<IPropsField> = ({
   return (
     <>
       {_field.prefix?.tag
-        ? createComponent(renderFieldComponent(), _field.prefix)
+        ? createComponentWithPrefix(renderFieldComponent(), _field.prefix)
         : renderFieldComponent()}
     </>
   );

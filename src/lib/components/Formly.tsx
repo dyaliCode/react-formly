@@ -13,6 +13,9 @@ import {
   preprocess_and_validate_field,
   saveForm,
 } from "../utils";
+import Action from "./buttons/Action";
+import Reset from "./buttons/Reset";
+import Submit from "./buttons/Submit";
 import Field from "./Field";
 
 const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
@@ -196,13 +199,11 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
               />
             );
           })}
-          {/* Buttons action */}
-          <button className={props.btnSubmit?.classes ?? ""} type="submit">
-            {props.btnSubmit?.text ?? "Submit"}
-          </button>
-          <button className={props.btnReset?.classes ?? ""} type="reset">
-            {props.btnReset?.text ?? "Reset"}
-          </button>
+          <Action
+            prefix={props.buttonsAction}
+            btnSubmit={props.btnSubmit}
+            btnReset={props.btnReset}
+          />
         </form>
       )}
     </>

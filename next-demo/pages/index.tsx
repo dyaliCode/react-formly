@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Formly, type IField } from "react-formly-light"; // formly-right, formly-svelte, formly-solid.
+import { Formly, type IField } from "react-formly-light";
 
 const Home: NextPage = () => {
   const form_name = "formly_fetch_data";
@@ -79,6 +79,8 @@ const Home: NextPage = () => {
     }
     return true;
   }
+
+  // *
   async function onTapMessage(values: any): Promise<boolean> {
     if (values) {
       if (values.message === "hey i am reactjs") {
@@ -91,9 +93,10 @@ const Home: NextPage = () => {
   const onSubmit = (data: any) => {
     console.log("onSubmit", data);
   };
-  // const onChange = (data: any) => {
-  //   console.log("onChange", data);
-  // };
+
+  const onChange = (data: any) => {
+    console.log("onChange", data);
+  };
 
   return (
     <>
@@ -101,7 +104,27 @@ const Home: NextPage = () => {
         fields={_fields}
         form_name={form_name}
         onSubmit={onSubmit}
-        // onChange={onChange}
+        onChange={onChange}
+        btnSubmit={{
+          text: "Send",
+          // classes: "btn btn-primary",
+          prefix: {
+            tag: "div",
+            classes: ["button-submit"],
+          },
+        }}
+        btnReset={{
+          text: "Cancel",
+          // classes: "btn-danger",
+          prefix: {
+            tag: "div",
+            classes: ["button-cancel"],
+          },
+        }}
+        buttonsAction={{
+          tag: "div",
+          classes: ["button-action"],
+        }}
       />
     </>
   );

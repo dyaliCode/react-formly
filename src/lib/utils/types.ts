@@ -8,6 +8,7 @@ export interface IFormProps {
   onSubmit?: Function;
   onChange?: Function;
   classes?: string;
+  buttonsAction?: IPrefix;
 }
 
 export interface IForm extends IFormProps {
@@ -105,14 +106,22 @@ export interface ISubmit {
   classes: string[];
 }
 
+export interface IButton {
+  type: "submit" | "reset";
+  text: string;
+  classes?: string;
+  prefix?: IPrefix;
+}
 export interface IBtnSubmit {
   text?: string;
   classes?: string;
+  prefix?: IPrefix;
 }
 
 export interface IBtnReset {
   text?: string;
   classes?: string;
+  prefix?: IPrefix;
 }
 
 export interface IFileRules {
