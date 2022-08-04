@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Formly, IField } from "my-lib";
+import { Formly, IField } from "react-formly";
 import { useState } from "react";
 
 const Home: NextPage = () => {

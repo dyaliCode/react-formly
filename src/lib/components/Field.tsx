@@ -1,22 +1,21 @@
 import React, {
   ComponentClass,
-  Fragment,
   FunctionComponent,
   memo,
   useEffect,
-  useState
-} from 'react'
-import { IField, IPropsField } from '../utils/types'
+  useState,
+} from "react";
+import { IField, IPropsField } from "../utils/types";
 
 // * Field component.
-import Input from './fields/Input'
-import Select from './fields/Select'
-import File from './fields/File'
-import Textarea from './fields/Textarea'
-import Checkbox from './fields/Checkbox'
-import Radio from './fields/Radio'
-import Message from './Message'
-import AutoComplete from './fields/AutoComplete'
+import Input from "./fields/Input";
+import Select from "./fields/Select";
+import File from "./fields/File";
+import Textarea from "./fields/Textarea";
+import Checkbox from "./fields/Checkbox";
+import Radio from "./fields/Radio";
+import Message from "./Message";
+import AutoComplete from "./fields/AutoComplete";
 
 // * List field types.
 const components: any = {
@@ -26,25 +25,25 @@ const components: any = {
   textarea: Textarea,
   checkbox: Checkbox,
   radio: Radio,
-  autocomplete: AutoComplete
-}
+  autocomplete: AutoComplete,
+};
 
 const Field: FunctionComponent<IPropsField> = ({
   form_name,
   field,
-  changeValue
+  changeValue,
 }: IPropsField) => {
-  const [_field, _setField] = useState<IField>(field)
-  const FieldComponent: ComponentClass<any, any> = components[field.type]
+  const [_field, _setField] = useState<IField>(field);
+  const FieldComponent: ComponentClass<any, any> = components[field.type];
 
   // * Init.
   useEffect(() => {
-    _setField(field)
-  }, [field])
+    _setField(field);
+  }, [field]);
 
   const onChange = (data: any) => {
-    changeValue(data)
-  }
+    changeValue(data);
+  };
 
   // * Create element tag.
   const createComponent = (
@@ -52,16 +51,16 @@ const Field: FunctionComponent<IPropsField> = ({
     props: { tag?: string; classes?: string[] }
   ) => {
     return React.createElement(
-      props.tag ?? 'div',
-      { className: props.classes?.join(' ') },
+      props.tag ?? "div",
+      { className: props.classes?.join(" ") },
       children
-    )
-  }
+    );
+  };
 
   // * Render element field.
   const renderFieldComponent = () => {
     return (
-      <Fragment>
+      <>
         {_field.attributes.label && (
           <label htmlFor={_field.attributes.id}>
             {_field.attributes.label}
@@ -73,9 +72,11 @@ const Field: FunctionComponent<IPropsField> = ({
           field={_field}
           changeValue={onChange}
         />
-      </Fragment>
-    )
-  }
+        {/* Errors */}
+        {renderErrors()}
+      </>
+    );
+  };
 
   // * Render errors list.
   const renderErrors = () => {
@@ -87,21 +88,18 @@ const Field: FunctionComponent<IPropsField> = ({
             error={error}
             messages={_field.messages ? _field.messages : []}
           />
-        ))
+        ));
       }
     }
-  }
+  };
 
   return (
-    <Fragment>
+    <>
       {_field.prefix?.tag
         ? createComponent(renderFieldComponent(), _field.prefix)
         : renderFieldComponent()}
+    </>
+  );
+};
 
-      {/* Errors */}
-      {renderErrors()}
-    </Fragment>
-  )
-}
-
-export default memo(Field)
+export default memo(Field);

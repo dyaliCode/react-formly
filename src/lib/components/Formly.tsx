@@ -32,11 +32,12 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
 
   // * Init formly.
   useEffect(() => {
+    console.log("props.fields", props.fields);
     async function init() {
       let values: any = currentForm.values ?? {};
 
       const fields_updated = await Promise.all(
-        _fields.map(async (field: IField) => {
+        props.fields.map(async (field: IField) => {
           values[`${field.name}`] = field.value ?? null;
           // * Preprocess and validate field.
           field = await preprocess_and_validate_field(
@@ -168,6 +169,11 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
 
   return (
     <>
+      {/* {currentForm.fields.length > 0 && (
+        <pre>
+          <code>{JSON.stringify(currentForm.fields, null, 2)}</code>
+        </pre>
+      )} */}
       <form
         className={props.classes ?? undefined}
         ref={elForm}

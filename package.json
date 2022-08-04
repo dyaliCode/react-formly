@@ -1,8 +1,17 @@
 {
-  "name": "my-lib",
+  "name": "react-formly",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "author": "Kamal Sahmoud",
+  "contributors": [
+    "Kamal Sahmoud"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dyaliCode/react-formly"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -24,17 +33,44 @@
     "vite": "^3.0.0",
     "vite-plugin-dts": "^1.4.1"
   },
-  "license": "UNLICENSED",
   "files": [
     "dist"
   ],
-  "main": "./dist/my-lib.umd.js",
-  "module": "./dist/my-lib.es.js",
+  "main": "./dist/react-formly.umd.js",
+  "module": "./dist/react-formly.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/my-lib.es.js",
-      "require": "./dist/my-lib.umd.js"
+      "import": "./dist/react-formly.es.js",
+      "require": "./dist/react-formly.umd.js"
     }
-  }
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "react-v3",
+    "react-framework",
+    "react-formly",
+    "react-form",
+    "react-forms",
+    "react-form-validations",
+    "react-form-validation",
+    "react-form-validators",
+    "react-form-validator",
+    "react-formly-validations",
+    "react-formly-validation",
+    "react-formly-validators",
+    "react-formly-validator",
+    "react-validations",
+    "react-validation",
+    "react-validators",
+    "react-validator",
+    "form",
+    "forms",
+    "formly",
+    "validations",
+    "validation",
+    "validators",
+    "validator"
+  ]
 }

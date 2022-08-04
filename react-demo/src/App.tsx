@@ -1,111 +1,109 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import { useEffect, useState } from "react";
 import "./App.css";
 
-import { Formly, IField } from "my-lib";
+import { Formly, IField } from "react-formly";
+
+// Fetch Users
+const fetchUsers = async () => {
+  const res = await fetch("https://jsonplaceholder.cypress.io/users?_limit=10");
+  const data = await res.json();
+  return data.map((item: any) => ({ value: item.id, title: item.name }));
+};
+
+// Fetch posts
+const fetchPosts = async () => {
+  const res = await fetch("https://jsonplaceholder.cypress.io/posts?_limit=10");
+  const data = await res.json();
+  return data.map((item: any) => ({ value: item.id, title: item.title }));
+};
 
 function App() {
-  // Fetch Users
-  const fetchUsers = async () => {
-    const res = await fetch(
-      "https://jsonplaceholder.cypress.io/users?_limit=10"
-    );
-    const data = await res.json();
-    return data.map((item: any) => ({ value: item.id, title: item.name }));
-  };
-
-  // Fetch posts
-  const fetchPosts = async () => {
-    const res = await fetch(
-      "https://jsonplaceholder.cypress.io/posts?_limit=10"
-    );
-    const data = await res.json();
-    return data.map((item: any) => ({ value: item.id, title: item.title }));
-  };
-
-  const [loading, setLaoding] = useState<boolean>(false);
-
   const form_name = "formly_fetch_data";
-  const _fields: IField[] = [
+  const fields: IField[] = [
     {
-      type: "input", // required
-      name: "firstname", // required
+      type: "select",
+      name: "category",
       attributes: {
-        type: "text",
-        id: "firstname", // required
-        classes: ["form-control"],
-        placeholder: "Tap your first name",
+        classes: ["p-2 rounded-md text-slate-500"],
+        id: "category",
+        label: "Category",
       },
-      rules: ["required", "min:3", "max:10"],
-      messages: {
-        required: "The firstname is required",
-        min: "Your firstname is too short min=3",
-        max: "Your firstname is too long max=10",
-      },
-      prefix: {
-        tag: "div",
+      rules: ["required"],
+      extra: {
+        options: [
+          {
+            value: null,
+            title: "None",
+          },
+          {
+            value: 1,
+            title: "Users",
+          },
+          {
+            value: 2,
+            title: "Posts",
+          },
+        ],
       },
     },
     {
-      type: "input", // required
-      name: "password", // required
+      type: "select",
+      name: "items",
       attributes: {
-        type: "password",
-        id: "password", // required
-        classes: ["form-control"],
-        placeholder: "Tap your password",
-        autocomplete: "off",
+        classes: ["p-2 rounded-md text-slate-500"],
+        id: "items",
+        label: "Items",
       },
-      rules: ["required", "min:6", "max:10"],
-      messages: {
-        required: "The password is required",
-        min: "Your password is too short min=6",
-        max: "Your password is too long max=10",
-      },
-      prefix: {
-        tag: "div",
+      extra: {},
+      preprocess: async (field: IField, fields: IField[], values: any) => {
+        if (values.touched === "category") {
+          setLaoding(true);
+          field.extra.options =
+            values.category == 1 ? await fetchUsers() : await fetchPosts();
+          field.value = field.extra.options[0].value;
+          setLaoding(false);
+        }
+        return field;
       },
     },
   ];
 
-  const [fields, setFields] = useState(_fields);
-  const [count, setCount] = useState(0);
+  const [_fields, _setFields] = useState<IField[]>(fields);
+  const [loading, setLaoding] = useState<boolean>(false);
 
-  let data = {};
+  useEffect(() => {
+    _setFields(fields);
+  }, []);
+
   const onSubmit = (data: any) => {
     console.log("data", data);
   };
+
   const onChange = (data: any) => {
     console.log("onChange", data);
   };
 
-  const onUpdateFields = () => {
-    const __fields = fields.map((field: IField) => {
-      field.value = field.value ?? " updated";
-      return field;
-    });
-    setFields(__fields);
-  };
-
   return (
-    <>
+    <div className="w-full h-screen bg-gray-900 text-slate-50">
       {loading ? "Loading..." : "Done"}
       <Formly
-        fields={fields}
+        fields={_fields}
         form_name={form_name}
         onSubmit={onSubmit}
         onChange={onChange}
         classes={
-          "p-10 bg-blue-300 max-w-screen-xl m-full p-4 flex flex-col space-y-2"
+          "p-10 bg-slate-800 border-2 border-slate-700 max-w-screen-xl w-1/2 m-auto p-4 flex flex-col space-y-2 rounded-lg"
         }
         btnSubmit={{
           text: "Send",
+          classes: "bg-blue-500 text-white font-bold py-2 px-4 rounded-full",
         }}
         btnReset={{
           text: "Cancel",
+          classes: "bg-red-500 text-white font-bold py-2 px-4 rounded-full",
         }}
       />
-    </>
+    </div>
   );
 }
 
