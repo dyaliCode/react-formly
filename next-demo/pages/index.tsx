@@ -1,109 +1,107 @@
 import type { NextPage } from "next";
-import { Formly, IField } from "react-formly";
-import { useState } from "react";
+import { Formly, type IField } from "react-formly-light"; // formly-right, formly-svelte, formly-solid.
 
 const Home: NextPage = () => {
-  // Fetch Users
-  const fetchUsers = async () => {
-    const res = await fetch(
-      "https://jsonplaceholder.cypress.io/users?_limit=10"
-    );
-    const data = await res.json();
-    return data.map((item: any) => ({ value: item.id, title: item.name }));
-  };
-
-  // Fetch posts
-  const fetchPosts = async () => {
-    const res = await fetch(
-      "https://jsonplaceholder.cypress.io/posts?_limit=10"
-    );
-    const data = await res.json();
-    return data.map((item: any) => ({ value: item.id, title: item.title }));
-  };
-
-  const [loading, setLaoding] = useState<boolean>(false);
-
   const form_name = "formly_fetch_data";
   const _fields: IField[] = [
     {
-      type: "input", // required
-      name: "firstname", // required
+      type: "input",
+      name: "firstname",
       attributes: {
-        type: "text",
-        id: "firstname", // required
-        classes: ["form-control"],
-        placeholder: "Tap your first name",
+        id: "firstname",
+        placeholder: "Firstname",
         autocomplete: "off",
         autocorrect: "off",
+      },
+      prefix: {
+        tag: "div",
+        classes: ["form-group"],
       },
       rules: ["required", "min:3", "max:10"],
       messages: {
-        required: "The firstname is required",
-        min: "Your firstname is too short min=3",
-        max: "Your firstname is too long max=10",
-      },
-      prefix: {
-        tag: "div",
+        required: "Firstname is required",
+        min: "Firstname must be at least 3 characters",
+        max: "Firstname must be less than 10 characters",
       },
     },
     {
-      type: "input", // required
-      name: "password", // required
+      type: "input",
+      name: "lastname",
       attributes: {
-        id: "password", // required
-        classes: ["form-control"],
-        placeholder: "Tap your password",
+        id: "lastname",
+        placeholder: "Lastname",
         autocomplete: "off",
         autocorrect: "off",
       },
-      rules: ["required", "min:6", "max:10"],
+      prefix: {
+        tag: "div",
+        classes: ["form-group"],
+      },
+      rules: [
+        "required",
+        "min:3",
+        "max:10",
+        { name: "notEqual", fnc: notEqual },
+      ],
       messages: {
-        required: "The password is required",
-        min: "Your password is too short min=6",
-        max: "Your password is too long max=10",
+        required: "lastname is required",
+        min: "lastname must be at least 3 characters",
+        max: "lastname must be less than 10 characters",
+        notEqual: "lastname must not be equal firstname",
+      },
+    },
+    {
+      type: "input",
+      name: "message",
+      attributes: {
+        id: "message",
+        placeholder: "message",
+        autocomplete: "off",
+        autocorrect: "off",
       },
       prefix: {
         tag: "div",
+        classes: ["form-group"],
+      },
+      rules: [{ name: "onTapMessage", fnc: onTapMessage }],
+      messages: {
+        onTapMessage: "Should tap 'hey i am reactjs'",
       },
     },
   ];
 
-  const [fields, setFields] = useState(_fields);
-  const [count, setCount] = useState(0);
+  // * custom rules
+  async function notEqual(values: any): Promise<boolean> {
+    if (values) {
+      if (values.firstname === values.lastname) {
+        return false;
+      }
+    }
+    return true;
+  }
+  async function onTapMessage(values: any): Promise<boolean> {
+    if (values) {
+      if (values.message === "hey i am reactjs") {
+        return true;
+      }
+    }
+    return false;
+  }
 
-  let data = {};
   const onSubmit = (data: any) => {
-    console.log("data", data);
+    console.log("onSubmit", data);
   };
-  const onChange = (data: any) => {
-    console.log("onChange", data);
-  };
-
-  const onUpdateFields = () => {
-    const __fields = fields.map((field: IField) => {
-      field.value = field.value ?? " updated";
-      return field;
-    });
-    setFields(__fields);
-  };
+  // const onChange = (data: any) => {
+  //   console.log("onChange", data);
+  // };
 
   return (
     <>
-      {loading ? "Loading..." : "Done"}
       <Formly
-        fields={fields}
+        fields={_fields}
         form_name={form_name}
         onSubmit={onSubmit}
-        onChange={onChange}
-        classes={
-          "p-10 bg-blue-300 max-w-screen-xl m-full p-4 flex flex-col space-y-2"
-        }
-        btnSubmit={{
-          text: "Send",
-        }}
-        btnReset={{
-          text: "Cancel",
-        }}
+        // onChange={onChange}
       />
     </>
   );

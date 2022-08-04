@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-import { Formly, IField } from "react-formly";
+import { Formly, IField } from "react-formly-light";
 
 // Fetch Users
 const fetchUsers = async () => {
@@ -46,26 +46,26 @@ function App() {
         ],
       },
     },
-    {
-      type: "select",
-      name: "items",
-      attributes: {
-        classes: ["p-2 rounded-md text-slate-500"],
-        id: "items",
-        label: "Items",
-      },
-      extra: {},
-      preprocess: async (field: IField, fields: IField[], values: any) => {
-        if (values.touched === "category") {
-          setLaoding(true);
-          field.extra.options =
-            values.category == 1 ? await fetchUsers() : await fetchPosts();
-          field.value = field.extra.options[0].value;
-          setLaoding(false);
-        }
-        return field;
-      },
-    },
+    // {
+    //   type: "select",
+    //   name: "items",
+    //   attributes: {
+    //     classes: ["p-2 rounded-md text-slate-500"],
+    //     id: "items",
+    //     label: "Items",
+    //   },
+    //   extra: {},
+    //   preprocess: async (field: IField, fields: IField[], values: any) => {
+    //     if (values.touched === "category") {
+    //       setLaoding(true);
+    //       field.extra.options =
+    //         values.category == 1 ? await fetchUsers() : await fetchPosts();
+    //       field.value = field.extra.options[0].value;
+    //       setLaoding(false);
+    //     }
+    //     return field;
+    //   },
+    // },
   ];
 
   const [_fields, _setFields] = useState<IField[]>(fields);

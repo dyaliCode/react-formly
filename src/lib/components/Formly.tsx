@@ -4,17 +4,14 @@ import React, {
   useState,
   memo,
   useRef,
-  Fragment,
 } from "react";
 import {
-  // isFieldDuplicated,
+  isFieldDuplicated,
   IField,
   IForm,
   IFormProps,
   preprocess_and_validate_field,
   saveForm,
-  // type IBtnSubmit,
-  // type IBtnReset
 } from "../utils";
 import Field from "./Field";
 
@@ -29,10 +26,14 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
   });
   const [_fields, _setFields] = useState<IField[]>(props.fields);
   const [_values, _setValues] = useState<any>({});
+  const [fieldDuplicated, setFieldDuplicated] = useState<boolean>(false);
 
   // * Init formly.
   useEffect(() => {
-    console.log("props.fields", props.fields);
+    // ! Before all check if there is a duplicated field.
+    const is_duplicated: boolean = isFieldDuplicated(props.fields);
+    setFieldDuplicated(is_duplicated);
+
     async function init() {
       let values: any = currentForm.values ?? {};
 
@@ -127,9 +128,9 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
     setForms(await saveForm(forms, newForm));
 
     // * Dispatch values.
-    // props.get_values && props.get_values(_values);
+    props.get_values && props.get_values(_values);
     if (props.onChange) {
-      props.onChange({ values: currentForm.values, valid: currentForm.valid });
+      props.onChange({ values: currentForm.values, valid: newForm.valid });
     }
   };
 
@@ -169,35 +170,41 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
 
   return (
     <>
-      {/* {currentForm.fields.length > 0 && (
-        <pre>
-          <code>{JSON.stringify(currentForm.fields, null, 2)}</code>
-        </pre>
-      )} */}
-      <form
-        className={props.classes ?? undefined}
-        ref={elForm}
-        onSubmit={onSubmitHandler}
-        onReset={onResetHandler}
-      >
-        {currentForm.fields.map((field) => {
-          return (
-            <Field
-              key={field.name}
-              form_name={props.form_name}
-              field={field}
-              changeValue={onChange}
-            />
-          );
-        })}
-        {/* Buttons action */}
-        <button className={props.btnSubmit?.classes ?? ""} type="submit">
-          {props.btnSubmit?.text ?? "Submit"}
-        </button>
-        <button className={props.btnReset?.classes ?? ""} type="reset">
-          {props.btnReset?.text ? props.btnReset?.text : "Reset"}
-        </button>
-      </form>
+      {fieldDuplicated ? (
+        <p>
+          <code>
+            <b>
+              Error! Detect duplicate fields(name or id attributes), make sure
+              you put unique name and id for each field.
+            </b>
+          </code>
+        </p>
+      ) : (
+        <form
+          className={props.classes ?? undefined}
+          ref={elForm}
+          onSubmit={onSubmitHandler}
+          onReset={onResetHandler}
+        >
+          {currentForm.fields.map((field) => {
+            return (
+              <Field
+                key={field.name}
+                form_name={props.form_name}
+                field={field}
+                changeValue={onChange}
+              />
+            );
+          })}
+          {/* Buttons action */}
+          <button className={props.btnSubmit?.classes ?? ""} type="submit">
+            {props.btnSubmit?.text ?? "Submit"}
+          </button>
+          <button className={props.btnReset?.classes ?? ""} type="reset">
+            {props.btnReset?.text ?? "Reset"}
+          </button>
+        </form>
+      )}
     </>
   );
 };

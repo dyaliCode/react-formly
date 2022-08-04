@@ -1,6 +1,6 @@
 {
-  "name": "react-formly",
-  "private": true,
+  "name": "react-formly-light",
+  "private": false,
   "version": "0.0.1",
   "type": "module",
   "author": "Kamal Sahmoud",
@@ -16,7 +16,6 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\"",
     "watch": "vite build --watch"
   },
   "dependencies": {

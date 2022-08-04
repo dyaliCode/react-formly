@@ -24,7 +24,7 @@ export type RulesList =
   | "file"
   | "equal"
   | "url"
-  | { name: string; fnc: () => Promise<boolean> };
+  | { name: string; fnc: (values: any) => Promise<boolean> };
 
 export interface IField {
   type:
