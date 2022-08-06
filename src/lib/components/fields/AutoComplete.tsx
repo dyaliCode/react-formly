@@ -28,7 +28,7 @@ const styleSelectedItems: any = {
 const styleItem: any = {
   // flex: auto,
   fontSize: "0.75rem",
-  padding: "0.5rem",
+  padding: "0.4rem",
   backgroundColor: "#ff3e00",
   color: "white",
   borderRadius: "5px",
@@ -42,7 +42,7 @@ const styleDeselect: any = {
   padding: "2px 7px 3px 7px",
   marginLeft: "7px",
   fontSize: "0.6rem",
-  backgroundColor: "#333333",
+  backgroundColor: "red",
   border: "solid 1px rgba(255, 255, 255, 0.2)",
   color: "white",
 };
@@ -65,13 +65,13 @@ const styleUlLi: any = {
 };
 
 const styleLi: any = {
-  borderBottom: "1px dashed #999999",
+  // borderBottom: "1px dashed #999999",
   padding: "0.75rem",
   cursor: "pointer",
 };
 const styleLiHover: any = {
   backgroundColor: "#ff40009c",
-  borderBottom: "1px dashed #ff3e00",
+  // borderBottom: "1px dashed #ff3e00",
   color: "white",
 };
 
