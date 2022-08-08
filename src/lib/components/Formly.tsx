@@ -14,8 +14,6 @@ import {
   saveForm,
 } from "../utils";
 import Action from "./buttons/Action";
-import Reset from "./buttons/Reset";
-import Submit from "./buttons/Submit";
 import Field from "./Field";
 
 const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
@@ -33,13 +31,13 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
 
   // * Init formly.
   useEffect(() => {
+    console.log("111", 111);
     // ! Before all check if there is a duplicated field.
     const is_duplicated: boolean = isFieldDuplicated(props.fields);
     setFieldDuplicated(is_duplicated);
 
     async function init() {
       let values: any = currentForm.values ?? {};
-
       const fields_updated = await Promise.all(
         props.fields.map(async (field: IField) => {
           values[`${field.name}`] = field.value ?? null;
@@ -52,9 +50,7 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
           return field;
         })
       );
-
       _setFields(fields_updated);
-
       // * Find dirty in the current form.
       const dirty = fields_updated.find((field: IField) => {
         if (field.validation) {
@@ -62,10 +58,8 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
         }
         return false;
       });
-
       // * Set values.
       _setValues(values);
-
       // * Get form.
       const newForm = {
         ...currentForm,
@@ -73,12 +67,10 @@ const Formly: FunctionComponent<IFormProps> = (props: IFormProps) => {
         values,
         valid: dirty ? false : true,
       };
-      // * console.log("newForm", newForm);
+      // * Set current form.
       setCurrentForm(newForm);
-
       // * Save forms.
       setForms(await saveForm(forms, newForm));
-
       // * Dispatch values.
       props.get_values && props.get_values(_values);
     }
